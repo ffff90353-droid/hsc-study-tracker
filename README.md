@@ -1,1 +1,2 @@
-# hsc-study-tracker
+# hsc-study-tracker 
+index.html
