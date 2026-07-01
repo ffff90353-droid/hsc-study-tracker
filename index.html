@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSC '26 & '27 Study Tracker</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f4f7f6; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2c3e50; margin-bottom: 20px; }
+        .progress-bar-container { background: #e0e0e0; border-radius: 10px; height: 20px; margin-bottom: 20px; overflow: hidden; }
+        .progress-bar { background: #3498db; width: 0%; height: 100%; transition: width 0.3s; }
+        .subject { margin-bottom: 20px; border: 1px solid #ddd; padding: 10px; border-radius: 6px; }
+        .subject h3 { background: #ecf0f1; padding: 5px; color: #34495e; }
+        label { display: block; margin: 10px 0; cursor: pointer; }
+        .timer-section { text-align: center; margin-top: 30px; padding: 20px; background: #2c3e50; color: white; border-radius: 8px; }
+        .timer { font-size: 2rem; margin-bottom: 10px; font-weight: bold; }
+        button { padding: 10px 20px; margin: 5px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        button.start { background: #2ecc71; color: white; }
+        button.pause { background: #e74c3c; color: white; }
+        button.reset { background: #f39c12; color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>HSC স্টাডি ট্র্যাকার</h1>
+        
+        <!-- প্রোগ্রেস বার -->
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <p id="progressText">০% সম্পূর্ণ</p>
+
+        <!-- বিষয় ও চ্যাপ্টার লিস্ট -->
+        <div class="subject">
+            <h3>পদার্থবিজ্ঞান (১ম ও ২য় পত্র)</h3>
+            <label><input type="checkbox" onchange="updateProgress()"> ভেক্টর</label>
+            <label><input type="checkbox" onchange="updateProgress()"> নিউটনীয় বলবিদ্যা</label>
+            <label><input type="checkbox" onchange="updateProgress()"> তাপগতিবিদ্যা</label>
+            <label><input type="checkbox" onchange="updateProgress()"> স্থির তড়িৎ</label>
+        </div>
+
+        <div class="subject">
+            <h3>রসায়ন (১ম ও ২য় পত্র)</h3>
+            <label><input type="checkbox" onchange="updateProgress()"> গুণগত রসায়ন</label>
+            <label><input type="checkbox" onchange="updateProgress()"> মৌলের পর্যায়বৃত্ত ধর্ম ও রাসায়নিক বন্ধন</label>
+            <label><input type="checkbox" onchange="updateProgress()"> রাসায়নিক পরিবর্তন</label>
+        </div>
+
+        <!-- স্টাডি টাইমার -->
+        <div class="timer-section">
+            <h2>পোমোডোরো স্টাডি টাইমার</h2>
+            <div class="timer" id="timerDisplay">25:00</div>
+            <button class="start" onclick="startTimer()">শুরু</button>
+            <button class="pause" onclick="pauseTimer()">বিরতি</button>
+            <button class="reset" onclick="resetTimer()">রিসেট</button>
+        </div>
+    </div>
+
+    <script>
+        // প্রোগ্রেস ট্র্যাকার স্ক্রিপ্ট
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            let checkedCount = 0;
+            checkboxes.forEach(cb => {
+                if(cb.checked) checkedCount++;
+            });
+            
+            const percentage = Math.round((checkedCount / checkboxes.length) * 100);
+            document.getElementById('progressBar').style.width = percentage + '%';
+            document.getElementById('progressText').innerText = percentage + '% সম্পূর্ণ';
+        }
+
+        // টাইমার স্ক্রিপ্ট
+        let timer;
+        let timeLeft = 1500; // ২৫ মিনিট
+        let isRunning = false;
+
+        function updateDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timerDisplay').innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            if (isRunning) return;
+            isRunning = true;
+            timer = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    updateDisplay();
+                } else {
+                    clearInterval(timer);
+                    isRunning = false;
+                    alert('সময় শেষ! বিরতি নিন!');
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            clearInterval(timer);
+            isRunning = false;
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+            isRunning = false;
+            timeLeft = 1500;
+            updateDisplay();
+        }
+    </script>
+</body>
+</html>
